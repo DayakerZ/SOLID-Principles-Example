@@ -1,24 +1,30 @@
 import java.util.ArrayList;
 import java.util.List;
 
-class CalculateBill{
+interface Calculate{
+    double calculateBill();
+}
+class CalculateBill implements Calculate {
 
-    public double paidBill =0;
-    private final List<FeeStructure> feelist;
+    private  List<FeeStructure> feelist;
+
     public CalculateBill(List<FeeStructure> feelist){
         this.feelist = feelist;
     }
-    public void calculateTotalBill(){
-
+    @Override
+    public double calculateBill() {
+        double paidBill =0;
         for (FeeStructure i : feelist){
             paidBill += i.getFee();
         }
+        return paidBill;
     }
 }
-class PrintRecipt{
-    CalculateBill calculatedBill;
-    Studentgetter student;
-    public PrintRecipt(CalculateBill calculatedBill,Studentgetter student){
+
+abstract class PrintRecipt{
+    Calculate calculatedBill;
+    Student student;
+    public PrintRecipt(Calculate calculatedBill,Student student){
         this.student = student;
         this.calculatedBill = calculatedBill;
     }
@@ -26,10 +32,35 @@ class PrintRecipt{
         System.out.println("Name : "+student.getName());
         System.out.println("Roll Number : "+student.getRollNo());
         System.out.println("Department: "+student.getDepartment().getDepartmentName());
-        System.out.println("Total : "+calculatedBill.paidBill);
+        System.out.println("Total : "+ calculatedBill.calculateBill());
 
     }
 
+}
+class PrintReciptForDistanceStudents extends PrintRecipt{
+    public PrintReciptForDistanceStudents(Calculate calculatedBill, Student student) {
+        super(calculatedBill, student);
+    }
+
+    @Override
+    public void printRecipt() {
+        System.out.println("Name : "+student.getName());
+        System.out.println("Roll Number : "+student.getRollNo());
+        System.out.println("Department: "+student.getDepartment().getDepartmentName());
+        System.out.println("Total : "+ calculatedBill.calculateBill()*0.9);
+    }
+}
+class PrintReciptForRegularStudents extends PrintRecipt{
+    public PrintReciptForRegularStudents(Calculate calculatedBill, Student student) {
+        super(calculatedBill, student);
+    }
+    public void printRecipt(){
+        System.out.println("Name : "+student.getName());
+        System.out.println("Roll Number : "+student.getRollNo());
+        System.out.println("Department: "+student.getDepartment().getDepartmentName());
+        System.out.println("Total : "+ calculatedBill.calculateBill());
+
+    }
 }
 
 class ShowStatus{
@@ -39,7 +70,7 @@ class ShowStatus{
         this.statusList = statusList;
     }
     public void printStatus(){
-        for( FeeStatus i:statusList){
+        for(FeeStatus i:statusList){
             i.printFeeStatus();
         }
     }
@@ -50,24 +81,21 @@ public class GenerateRecipt {
 
     public static void main(String[] args) {
 
-        Studentgetter student = new Studentgetter();
         Department department = new CSE();
-        student.setName("Dayaker Reddy");
-        student.setRollNo("2451-18-733-125");
-        student.setDepartment(department);
+        Student student = new Studentwithouttitle("Dayaker Reddy","2451-18-733-125",department,"Distance");
 
-        List<FeeStructure> list = new ArrayList<FeeStructure>();
-        list.add(new TutionFee());
-        list.add(new UniversityFee());
+        List<FeeStructure> feeslist = new ArrayList<>();
+        feeslist.add(new TutionFee());
+        feeslist.add(new UniversityFee());
 
-        List<FeeStatus> statusList = new ArrayList<FeeStatus>();
+        List<FeeStatus> statusList = new ArrayList<>();
         statusList.add(new TutionPaymentStatus(true));
         statusList.add(new UniversityPaymentStatus(true));
         statusList.add(new MiscelleneousPaymentStatus(false));
 
-        CalculateBill bill = new CalculateBill(list);
-        bill.calculateTotalBill();
-        PrintRecipt printRecipt = new PrintRecipt(bill,student);
+        Calculate bill = new CalculateBill(feeslist);
+
+        PrintRecipt printRecipt = new PrintReciptForDistanceStudents(bill,student);
         printRecipt.printRecipt();
 
         ShowStatus status = new ShowStatus(statusList);

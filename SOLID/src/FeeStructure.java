@@ -6,6 +6,7 @@ class TutionFee implements FeeStructure{
 
     @Override
     public double getFee() {
+
         return 95576.76;
     }
 }
@@ -14,7 +15,6 @@ class UniversityFee implements FeeStructure{
 
     @Override
     public double getFee() {
-
 
         return 5789.98;
     }
