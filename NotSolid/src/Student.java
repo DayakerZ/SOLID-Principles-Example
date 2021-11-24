@@ -4,13 +4,13 @@ public class Student {
     protected String name;
     protected Department department;
     protected String typeOfEducation;
-    protected String title;
-    public Student(String rollNo,String name,Department department,String typeOfEducation,String title){
+    protected String role;
+    public Student(String rollNo,String name,Department department,String typeOfEducation,String role){
         this.rollNo = rollNo;
         this.name = name;
         this.department = department;
         this.typeOfEducation = typeOfEducation;
-        this.title = title;
+        this.role = role;
     }
     public Student(String rollNo,String name,Department department,String typeOfEducation){
         this.rollNo = rollNo;
@@ -31,23 +31,11 @@ public class Student {
     public String getTypeOfEducation(){
         return typeOfEducation;
     }
-    public String getTitle(){
-        return title;
+    //Liskov's substitution principle violation
+    public String getRole(){
+        return role;
     }
 }
 
-class StudentWithTitle extends Student {
-
-
-    public StudentWithTitle(String rollNo, String name, Department department, String typeOfEducation,String title) {
-        super(rollNo, name, department, typeOfEducation,title);
-    }
-}
-class StudentWithOutTitle extends Student{
-
-    public StudentWithOutTitle(String rollNo, String name, Department department, String typeOfEducation) {
-        super(rollNo, name, department, typeOfEducation);
-    }
-}
 
 

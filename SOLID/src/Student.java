@@ -24,21 +24,5 @@ public class Student {
     }
 }
 
-class StudentWithTitle extends Student {
-    private String title;
 
-    public StudentWithTitle(String rollNo, String name, Department department,String typeOfEducation,String title) {
-        super(rollNo, name, department,typeOfEducation);
-        this.title = title;
-    }
-
-    public String getTitle(){
-        return title;
-    }
-}
-class Studentwithouttitle extends Student{
-    public Studentwithouttitle(String rollNo, String name, Department department,String typeOfEducation) {
-        super(rollNo, name, department,typeOfEducation);
-    }
-}
 
